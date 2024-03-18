@@ -14,17 +14,33 @@ namespace CargoInfrastructure.Controllers
         {
             _context = context;
         }
-        [HttpGet("JsonData")]
-        public JsonResult JsonData()
+
+
+        [HttpGet("StationData")]
+        public async Task<IActionResult> GetStationData()
         {
-            var stations = _context.Stations.ToList();
-            List<object> statCargo = new List<object>();
-            statCargo.Add(new[] { "Станція", "Кількість доставок" });
-            foreach(var s in stations)
-            {
-                statCargo.Add(new object[] { s.Name, s.Cargos.Count() });
-            }
-            return new JsonResult(statCargo);
+            var stationData = await _context.Cargos
+                                .AsNoTracking()
+                                .GroupBy(d => d.Station)
+                                .Select(group => new object[] { group.Key, group.Count() })
+                                .ToListAsync();
+
+
+            return Ok(stationData);
         }
+
+        [HttpGet("TruckData")]
+        public async Task<IActionResult> GetTruckData()
+        {
+            var truckData = await _context.Cargos
+                                .AsNoTracking()
+                                .GroupBy(d => d.Truck)
+                                .Select(group => new object[] { group.Key, group.Count() })
+                                .ToListAsync();
+
+
+            return Ok(truckData);
+        }
+
     }
 }

@@ -67,7 +67,7 @@ namespace CargoInfrastructure.Controllers
         {
 
            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "Name");
-           ViewData["StationId"] = new SelectList(_context.Stations, "Id", "CityName");
+           ViewData["StationId"] = new SelectList(_context.Stations, "Id", "Name");
            ViewData["TruckId"] = new SelectList(_context.Trucks, "Id", "Model");
 
 
@@ -97,7 +97,7 @@ namespace CargoInfrastructure.Controllers
             cargo.Client = client;
             cargo.Station = station;
             ModelState.Clear();
-            TryValidateModel(cargo);
+           // TryValidateModel(cargo);
 
 
             if (ModelState.IsValid)
