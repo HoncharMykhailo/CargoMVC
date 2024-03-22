@@ -65,21 +65,24 @@ namespace CargoInfrastructure.Controllers
         // GET: Cargoes/Create
         public IActionResult Create(int clientId)
         {
+            ViewData["StationId"] = new SelectList(_context.Stations, "Id", "Name");
+            ViewData["TruckId"] = new SelectList(_context.Trucks, "Id", "Model");
 
-           ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "Name");
-           ViewData["StationId"] = new SelectList(_context.Stations, "Id", "Name");
-           ViewData["TruckId"] = new SelectList(_context.Trucks, "Id", "Model");
-
-
-
-            if (clientId != null && clientId!=0)
+            if (clientId != null && clientId != 0) // if client id determined
             {
-
+                var client = _context.Clients.Where(c => c.Id == clientId).FirstOrDefault();
                 ViewBag.ClientId = clientId;
-                ViewBag.ClientName = _context.Clients.Where(c => c.Id == clientId).FirstOrDefault().Name;
+                ViewBag.ClientName = client.Name;
+                ViewData["ClientId"] = new SelectList(new List<Client> { client }, "Id", "Name");
             }
+            else
+            {
+                ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "Name");
+            }
+
             return View();
         }
+
 
         // POST: Cargoes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.

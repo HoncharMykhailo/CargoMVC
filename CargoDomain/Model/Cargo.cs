@@ -13,7 +13,7 @@ public partial class Cargo:Entity
 
 
     [Required(ErrorMessage = "поле не повинно бути порожнім")]
-    [Display(Name = "КлієнтІД")]
+    [Display(Name = "Клієнт")]
     public int ClientId { get; set; }
 
 

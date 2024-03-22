@@ -60,22 +60,7 @@ namespace CargoInfrastructure.Controllers
 
         // GET: Drivers/Create
         public IActionResult Create(int truckId)
-        {/*
-            if (truckId == 0 || truckId == null)
-            {
-                ViewData["TruckId"] = new SelectList(_context.Trucks.Where(t => t.Id == truckId), "Id", "Model");
-               // ViewData["TruckId"] = new SelectList(_context.Trucks, "Id", "Model");
-
-            }
-            else
-            {
-                ViewData["TruckId"] = new SelectList(_context.Trucks, "Id", "Model");
-
-            }
-            ViewBag.TruckId = truckId;
-            ViewBag.TruckModel = _context.Trucks.Where(t => t.Id == truckId).FirstOrDefault().Model;
-            return View();
-            */
+        {
 
 
             ViewData["TruckId"] = new SelectList(_context.Trucks, "Id", "Model");
@@ -85,8 +70,19 @@ namespace CargoInfrastructure.Controllers
             if (truckId != null && truckId != 0)
             {
 
-                ViewBag.TruckId = truckId;
-                ViewBag.TruckName = _context.Trucks.Where(c => c.Id == truckId).FirstOrDefault().Model;
+
+                if (truckId != null && truckId != 0) // if truck id determined
+                {
+                    var truck = _context.Trucks.Where(c => c.Id == truckId).FirstOrDefault();
+                    ViewBag.TruckId = truckId;
+                    ViewBag.TruckModel = truck.Model;
+                    ViewData["TruckId"] = new SelectList(new List<Truck> { truck }, "Id", "Model");
+                }
+                else
+                {
+                    ViewData["TruckId"] = new SelectList(_context.Trucks, "Id", "Model");
+                }
+               
             }
             return View();
         }

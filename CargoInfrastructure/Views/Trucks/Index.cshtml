@@ -104,7 +104,7 @@
                         height: 600,
                     };
 
-                    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
                     chart.draw(data, options);
                 })
                 .catch(error => {
