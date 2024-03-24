@@ -1,12 +1,15 @@
 ﻿
+
+/*
 using CargoDomain.Model;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Bibliography;
+using CargoInfrastructure.Services;
 using LibraryInfrastructure.Services;
 
 namespace CargoInfrastructure.Services
 {
-    /*
+    
     public class StationImportService : IImportService<Station>
     {
         private readonly DbcargoContext _context;
@@ -82,13 +85,13 @@ namespace CargoInfrastructure.Services
                 {
                     var autName = row.Cell(i).Value.ToString();
                     //перевірка чи є такий автор в базі
-                    var author = await _context.Clients.FirstOrDefaultAsync(aut => aut.Name == autName, cancellationToken);
-                    if (author is null)
+                    var client = await _context.Clients.FirstOrDefaultAsync(aut => aut.Name == autName, cancellationToken);
+                    if (client is null)
                     {
-                        author = new Author();
-                        author.Name = autName;
-                        author.Info = "from EXCEL";
-                        _context.Clients.Add(author);
+                        client = new Author();
+                        client.Name = autName;
+                        client.Info = "from EXCEL";
+                        _context.Clients.Add(client);
                     }
                 }
             }
@@ -100,8 +103,10 @@ namespace CargoInfrastructure.Services
 
     }
 
-    */
+    
 }
 
 
 
+
+*/

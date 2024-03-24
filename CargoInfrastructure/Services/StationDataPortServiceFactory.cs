@@ -1,14 +1,15 @@
-﻿using CargoInfrastructure;
+﻿/*
+
+using CargoInfrastructure;
 using CargoInfrastructure.Services;
 using CargoDomain.Model;
 namespace LibraryInfrastructure.Services
 {
-    /*
-    public class CategoryDataPortServiceFactory
-        : IDataPortServiceFactory<Station>
+    
+    public class StationDataPortServiceFactory : IDataPortServiceFactory<Station>
     {
         private readonly DbcargoContext _context;
-        public CategoryDataPortServiceFactory(DbcargoContext context)
+        public StationDataPortServiceFactory(DbcargoContext context)
         {
             _context = context;
         }
@@ -29,5 +30,6 @@ namespace LibraryInfrastructure.Services
             throw new NotImplementedException($"No export service implemented for movies with content type {contentType}");
         }
     }
-    */
+    
 }
+*/

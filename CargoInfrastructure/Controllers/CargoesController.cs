@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CargoDomain.Model;
 using CargoInfrastructure;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CargoInfrastructure.Controllers
 {
+  //  [Authorize(Roles = "admin,user")]
     public class CargoesController : Controller
     {
         private readonly DbcargoContext _context;

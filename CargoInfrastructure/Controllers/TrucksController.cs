@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CargoDomain.Model;
 using CargoInfrastructure;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CargoInfrastructure.Controllers
 {
+   
     public class TrucksController : Controller
     {
         private readonly DbcargoContext _context;
@@ -43,7 +45,7 @@ namespace CargoInfrastructure.Controllers
             // return View(truck);
             return RedirectToAction("Index", "Drivers", new { id = truck.Id, model = truck.Model });
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Trucks/Create
         public IActionResult Create()
         {
@@ -65,7 +67,7 @@ namespace CargoInfrastructure.Controllers
             }
             return View(truck);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Trucks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -81,7 +83,7 @@ namespace CargoInfrastructure.Controllers
             }
             return View(truck);
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Trucks/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -116,7 +118,7 @@ namespace CargoInfrastructure.Controllers
             }
             return View(truck);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Trucks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -134,7 +136,7 @@ namespace CargoInfrastructure.Controllers
 
             return View(truck);
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Trucks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

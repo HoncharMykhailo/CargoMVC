@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using CargoDomain.Model;
 using CargoInfrastructure;
 using System.Runtime.Intrinsics.Arm;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CargoInfrastructure.Controllers
 {
+    //[Authorize(Roles = "admin,user")]
     public class DriversController : Controller
     {
         private readonly DbcargoContext _context;
@@ -19,7 +21,7 @@ namespace CargoInfrastructure.Controllers
         {
             _context = context;
         }
-
+        [Authorize(Roles = "admin, user")]
         // GET: Drivers
         public async Task<IActionResult> Index(int? id, string? model)
         {
@@ -38,7 +40,7 @@ namespace CargoInfrastructure.Controllers
             return View(await driverByTruck.ToListAsync());
 
         }
-
+        [Authorize(Roles = "admin, user")]
         // GET: Drivers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -57,7 +59,7 @@ namespace CargoInfrastructure.Controllers
 
             return View(driver);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Drivers/Create
         public IActionResult Create(int truckId)
         {
@@ -86,7 +88,7 @@ namespace CargoInfrastructure.Controllers
             }
             return View();
         }
-
+        [Authorize(Roles = "admin")]
 
         // POST: Drivers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -114,7 +116,7 @@ namespace CargoInfrastructure.Controllers
             // return View(driver);
             return RedirectToAction("Index", "Drivers", new { id = truckId, model = _context.Trucks.Where(t => t.Id == truckId).FirstOrDefault().Model });
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Drivers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -131,7 +133,7 @@ namespace CargoInfrastructure.Controllers
             ViewData["TruckId"] = new SelectList(_context.Trucks, "Id", "Model", driver.TruckId);
             return View(driver);
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Drivers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -167,7 +169,7 @@ namespace CargoInfrastructure.Controllers
             ViewData["TruckId"] = new SelectList(_context.Trucks, "Id", "Model", driver.TruckId);
             return View(driver);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Drivers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -186,7 +188,7 @@ namespace CargoInfrastructure.Controllers
 
             return View(driver);
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Drivers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

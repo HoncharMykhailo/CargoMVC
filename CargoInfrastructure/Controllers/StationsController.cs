@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using CargoDomain.Model;
 using CargoInfrastructure;
 using LibraryInfrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CargoInfrastructure.Controllers
 {
+   // [Authorize(Roles = "admin,user")]
     public class StationsController : Controller
     {
         private readonly DbcargoContext _context;
@@ -19,13 +21,13 @@ namespace CargoInfrastructure.Controllers
         {
             _context = context;
         }
-
+        [Authorize(Roles = "admin, user")]
         // GET: Stations
         public async Task<IActionResult> Index()
         {
             return View(await _context.Stations.ToListAsync());
         }
-
+        [Authorize(Roles = "admin, user")]
         // GET: Stations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -49,7 +51,7 @@ namespace CargoInfrastructure.Controllers
         {
             return View();
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Stations/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -65,7 +67,7 @@ namespace CargoInfrastructure.Controllers
             }
             return View(station);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Stations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -81,7 +83,7 @@ namespace CargoInfrastructure.Controllers
             }
             return View(station);
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Stations/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -116,7 +118,7 @@ namespace CargoInfrastructure.Controllers
             }
             return View(station);
         }
-
+        [Authorize(Roles = "admin")]
         // GET: Stations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -134,7 +136,7 @@ namespace CargoInfrastructure.Controllers
 
             return View(station);
         }
-
+        [Authorize(Roles = "admin")]
         // POST: Stations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -157,45 +159,6 @@ namespace CargoInfrastructure.Controllers
 
 
 
-
-
-        /*
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Import(IFormFile fileExcel, CancellationToken cancellationToken = default)
-        {
-            var importService = _stationDataPortServiceFactory.GetImportService(fileExcel.ContentType);
-            using var stream = fileExcel.OpenReadStream();
-            await ImportService.ImportFromStreamAsync(stream, cancellationToken);
-            return RedirectToAction(nameof(Index));
-
-        }
-
-
-
-        [HttpGet]
-        public async Task<IActionResult> Export([FromQuery] string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            CancellationToken cancellationToken = default)
-        {
-            var exportService = _stationDataPortServiceFactory.GetExportService(contentType);
-
-            var memoryStream = new MemoryStream();
-
-            await exportService.WriteToAsync(memoryStream, cancellationToken);
-
-            await memoryStream.FlushAsync(cancellationToken);
-            memoryStream.Position = 0;
-
-
-            return new FileStreamResult(memoryStream, contentType)
-            {
-                FileDownloadName = $"stations_{DateTime.UtcNow.ToShortDateString()}.xlsx"
-            };
-        }
-
-
-        */
 
     }
 }

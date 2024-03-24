@@ -1,4 +1,6 @@
+
 namespace CargoInfrastructure.Models
+
 {
     public class ErrorViewModel
     {
