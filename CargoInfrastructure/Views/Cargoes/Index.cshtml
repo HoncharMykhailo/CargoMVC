@@ -7,8 +7,28 @@
 <h1>Вантажі @ViewBag.ClientName</h1>
 
 <p>
-   @Html.ActionLink("Add Cargo","Create", new {clientId = ViewBag.ClientId})
+    @Html.ActionLink("Add Cargo", "Create", new { clientId = ViewBag.ClientId }, new { @class = "btn btn-primary" })
+    
+    <a href="@Url.Action("Export", "Cargoes")" class="btn btn-info">Export</a>
+
+
+
+    <form asp-controller="Cargoes" asp-action="Import" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="excelFile">Import Excel File:</label>
+            <input type="file" name = "file" class="form-control-file" id="excelFile" name="excelFile" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Import</button>
+    </form>
+
+
 </p>
+
+
+
+
+
+
 <table class="table">
     <thead>
         <tr>
@@ -34,32 +54,33 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Weight)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Volume)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Contain)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Client.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Station.CityName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Truck.Model)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Weight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Volume)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contain)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Station.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Truck.Model)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

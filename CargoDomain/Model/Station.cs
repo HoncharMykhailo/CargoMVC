@@ -30,7 +30,7 @@ public partial class Station
 
     [Required(ErrorMessage = "поле не повинно бути порожнім")]
     [Display(Name = "Пошта")]
-    [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail is not valid")]
+    [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail is not valid. Format: example@gmail.com")]
     public string Email { get; set; } = null!;
 
     public virtual ICollection<Cargo> Cargos { get; set; } = new List<Cargo>();

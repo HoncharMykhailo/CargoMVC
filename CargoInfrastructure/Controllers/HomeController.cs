@@ -15,6 +15,12 @@ namespace CargoInfrastructure.Controllers
 
         public IActionResult Index()
         {
+
+            bool isAuthenticated = User.Identity.IsAuthenticated;
+
+            ViewData["IsAuthenticated"] = isAuthenticated;
+
+
             return View();
         }
 
@@ -28,5 +34,10 @@ namespace CargoInfrastructure.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
+
+        
+
     }
 }

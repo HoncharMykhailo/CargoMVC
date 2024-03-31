@@ -1,14 +1,41 @@
 ﻿@model IEnumerable<CargoDomain.Model.Driver>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+
+
+
+@{
+    User currentUser = null;
+    bool isAdmin = false;
+
+    if (User != null)
+    {
+        // Get the current user
+        currentUser = await UserManager.GetUserAsync(User);
+
+        // Check if the user is an administrator
+        if (currentUser != null)
+        {
+            isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
+        }
+    }
+}
+
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
-
+@if (isAdmin)
+{
 <p>
     @Html.ActionLink("Add driver","Create", new {truckId = ViewBag.TruckId})
 </p>
+}
+
 <table class="table">
     <thead>
         <tr>
