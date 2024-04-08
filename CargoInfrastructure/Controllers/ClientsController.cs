@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using CargoDomain.Model;
 using CargoInfrastructure;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace CargoInfrastructure.Controllers
 {
@@ -16,10 +18,12 @@ namespace CargoInfrastructure.Controllers
     public class ClientsController : Controller
     {
         private readonly DbcargoContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public ClientsController(DbcargoContext context)
+        public ClientsController(DbcargoContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Clients
@@ -136,7 +140,7 @@ namespace CargoInfrastructure.Controllers
 
             return View(client);
         }
-
+        /*
         // POST: Clients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -151,6 +155,47 @@ namespace CargoInfrastructure.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        */
+
+
+        // POST: Clients/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var client = await _context.Clients.FindAsync(id);
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+            // Find the associated user
+            var user = await _userManager.FindByNameAsync(client.Email); // Assuming email is used as the username
+            if (user != null)
+            {
+                // Delete the user
+                var result = await _userManager.DeleteAsync(user);
+                if (!result.Succeeded)
+                {
+                    // Handle errors if user deletion fails
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return View("Error"); // You can return a specific error view here
+                }
+            }
+
+            _context.Clients.Remove(client);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+
+
+
 
         private bool ClientExists(int id)
         {

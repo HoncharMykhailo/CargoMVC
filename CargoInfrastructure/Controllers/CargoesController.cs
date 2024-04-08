@@ -17,6 +17,8 @@ using System.IO;
 using System.ComponentModel;
 using System.IO.Pipes;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace CargoInfrastructure.Controllers
 {
@@ -24,14 +26,15 @@ namespace CargoInfrastructure.Controllers
     public class CargoesController : Controller
     {
         private readonly DbcargoContext _context;
-
+        private readonly UserManager<User> _userManager;
 
         private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public CargoesController(DbcargoContext context, IWebHostEnvironment hostingEnvironment)
+        public CargoesController(DbcargoContext context, IWebHostEnvironment hostingEnvironment, UserManager<User> userManager)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            _userManager = userManager;
         }
 
         // GET: Cargoes
@@ -42,18 +45,34 @@ namespace CargoInfrastructure.Controllers
 
 
             //  if (id == null) return RedirectToAction("Clients", "Index");
-            if (id == null)// return RedirectToAction("Cargoes", "Index");
+            // if (id == null)// return RedirectToAction("Cargoes", "Index");
+            if (User.IsInRole("admin")&&id==null)
             {
                 return View(await dbcargoContext.ToListAsync());
             }
 
-            ViewBag.ClientId = id;
-            ViewBag.ClientName = name;
-            var cargoByClient = _context.Cargos.Where(c=>c.ClientId==id).Include(c=>c.Client);
+            if (id != null)
+            {
+                  ViewBag.ClientId = id;
+                  ViewBag.ClientName = name;
+                   var cargoByClient = _context.Cargos.Where(c=>c.ClientId==id).Include(c=>c.Client);
 
-            return View(await cargoByClient.ToListAsync());
+                   return View(await cargoByClient.ToListAsync());
+            }
 
-            
+            var currentUser = await _userManager.GetUserAsync(User);
+            var currentClient = await _context.Clients.FirstOrDefaultAsync(c => c.Email == currentUser.Email);
+
+
+
+            var clientCargo = _context.Cargos.Where(
+                c => c.ClientId == currentClient.Id)
+                .Include(c => c.Client);
+
+            return View(await clientCargo.ToListAsync());
+
+
+
         }
 
         // GET: Cargoes/Details/5
@@ -347,7 +366,11 @@ namespace CargoInfrastructure.Controllers
                     _context.Cargos.AddRange(cargoList);
                     await _context.SaveChangesAsync();
 
-                    return Ok($"Successfully imported {cargoList.Count} cargoes from the Excel file.");
+                   //   return Ok($"Successfully imported {cargoList.Count} cargoes from the Excel file.");
+                    // return Ok();
+                    // return View(cargo);
+                    //  return View();
+                    return RedirectToAction("Index", "Cargoes");
                 }
             }
             catch (Exception ex)
